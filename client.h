@@ -2,20 +2,20 @@
 #define CLIENT_H
 
 #include <QString>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QDebug>
 
 class Client
 {
-private:
-    QString nom, prenom, email, telephone, adresse, ville;
-
 public:
-    Client(QString nom, QString prenom, QString email,
-           QString telephone, QString adresse, QString ville);
-
-    bool ajouter();
+    Client() = default;
+    int id;
+    QString nom;
+    QString prenom;
+    QString cin;
+    QString email;
+    QString telephone;
+    QString profession;
+    QString role;
+    QString dateNaissance;
 };
 
-#endif
+#endif // CLIENT_H
