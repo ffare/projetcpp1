@@ -1,4 +1,15 @@
 #include "client.h"
 
-// Currently empty because Client is just a data structure.
-// You can later add functions for validation, DB operations, etc.
+QString Client::toInsertQuery() const
+{
+    return QString("(%1, '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9')")
+    .arg(id)
+        .arg(nom)
+        .arg(prenom)
+        .arg(cin)
+        .arg(email)
+        .arg(telephone)
+        .arg(profession)
+        .arg(role)
+        .arg(dateNaissance);
+}

@@ -24,6 +24,8 @@ private slots:
 
     void on_centralwidget_customContextMenuRequested(const QPoint &pos);
 
+    void on_tableClient_1_clicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
 
