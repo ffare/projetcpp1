@@ -11,12 +11,14 @@ CONFIG += c++17
 SOURCES += \
     client.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    vehicule.cpp
 
 HEADERS += \
     client.h \
     connection.h \
-    mainwindow.h
+    mainwindow.h \
+    vehicule.h
 
 FORMS += \
     mainwindow.ui

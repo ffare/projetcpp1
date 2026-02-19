@@ -42,10 +42,19 @@ private slots:
 
     void on_commandLinkButton_24_clicked();
 
+    void on_ajouter_3_clicked();
+
+    void on_modifier_3_clicked();
+
+    void on_delete_btn_2_clicked();
+
+    void on_pushButton_3_2_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     void loadClients(); // Function to load data into tableClient_1
+    void loadVehicules();
 };
 
 #endif // MAINWINDOW_H

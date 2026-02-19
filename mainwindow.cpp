@@ -35,6 +35,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->tableClient_1->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableClient_1->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableVehicule_2->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableVehicule_2->setSelectionMode(QAbstractItemView::SingleSelection);
 
     // Connect buttons
     // connect(ui->pd_ajouter_1, &QPushButton::clicked, this, &MainWindow::on_pd_ajouter_1_clicked);
@@ -47,8 +49,9 @@ MainWindow::MainWindow(QWidget *parent)
         return;
     }
 
-    // Load clients into table
+    // Load when app starts
     loadClients();
+    loadVehicules();
 }
 
 MainWindow::~MainWindow()
@@ -422,5 +425,183 @@ void MainWindow::on_commandLinkButton_18_clicked()
 void MainWindow::on_commandLinkButton_24_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
+}
+
+
+// ----------------Vehicule---------------------
+
+void MainWindow::loadVehicules()
+{
+    QSqlQueryModel *model = new QSqlQueryModel(this);
+    model->setQuery("SELECT id, marque, modele, immatriculation, type, carburant, capacite, kilometrage, statut FROM vehicule");
+
+    model->setHeaderData(0, Qt::Horizontal, "ID");
+    model->setHeaderData(1, Qt::Horizontal, "Marque");
+    model->setHeaderData(2, Qt::Horizontal, "Modele");
+    model->setHeaderData(3, Qt::Horizontal, "Immatriculation");
+    model->setHeaderData(4, Qt::Horizontal, "Type");
+    model->setHeaderData(5, Qt::Horizontal, "Carburant");
+    model->setHeaderData(6, Qt::Horizontal, "Capacité");
+    model->setHeaderData(7, Qt::Horizontal, "Kilometrage");
+    model->setHeaderData(8, Qt::Horizontal, "Statut");
+
+    ui->tableVehicule_2->setModel(model);
+    ui->tableVehicule_2->resizeColumnsToContents();
+}
+
+void MainWindow::on_ajouter_3_clicked()
+{
+    QSqlQuery query;
+
+    query.prepare("INSERT INTO vehicule "
+                  "(id, marque, modele, immatriculation, type, carburant, capacite, kilometrage, statut) "
+                  "VALUES (:id, :marque, :modele, :immatriculation, :type, :carburant, :capacite, :kilometrage, :statut)");
+
+    query.bindValue(":id", ui->id_3->text().toInt());
+    query.bindValue(":marque", ui->marque_3->text());
+    query.bindValue(":modele", ui->modele_3->text());
+    query.bindValue(":immatriculation", ui->immatriculation_3->text());
+    query.bindValue(":type", ui->type_3->text());
+    query.bindValue(":carburant", ui->carburant_3->text());
+    query.bindValue(":capacite", ui->capacite_3->text().toInt());
+    query.bindValue(":kilometrage", ui->kilometrage_3->text().toInt());
+    query.bindValue(":statut", ui->statut_3->text());
+
+    if(query.exec())
+    {
+        QMessageBox::information(this, "Succès", "Véhicule ajouté !");
+        loadVehicules();
+    }
+    else
+    {
+        QMessageBox::critical(this, "Erreur", query.lastError().text());
+    }
+}
+
+
+
+void MainWindow::on_modifier_3_clicked()
+{
+    QSqlQuery query;
+
+    query.prepare("UPDATE vehicule SET "
+                  "marque=:marque, modele=:modele, immatriculation=:immatriculation, "
+                  "type=:type, carburant=:carburant, capacite=:capacite, "
+                  "kilometrage=:kilometrage, statut=:statut "
+                  "WHERE id=:id");
+
+    query.bindValue(":id", ui->id_3->text().toInt());
+    query.bindValue(":marque", ui->marque_3->text());
+    query.bindValue(":modele", ui->modele_3->text());
+    query.bindValue(":immatriculation", ui->immatriculation_3->text());
+    query.bindValue(":type", ui->type_3->text());
+    query.bindValue(":carburant", ui->carburant_3->text());
+    query.bindValue(":capacite", ui->capacite_3->text().toInt());
+    query.bindValue(":kilometrage", ui->kilometrage_3->text().toInt());
+    query.bindValue(":statut", ui->statut_3->text());
+
+    if(query.exec())
+    {
+        QMessageBox::information(this, "Succès", "Véhicule modifié !");
+        loadVehicules();
+    }
+    else
+    {
+        QMessageBox::critical(this, "Erreur", query.lastError().text());
+    }
+}
+
+
+void MainWindow::on_delete_btn_2_clicked()
+{
+    QModelIndexList selection = ui->tableVehicule_2->selectionModel()->selectedRows();
+    if (selection.isEmpty()) {
+        QMessageBox::warning(this, "Attention", "Sélectionnez un véhicule !");
+        return;
+    }
+
+    int row = selection.at(0).row();
+    int vehiculeId = ui->tableVehicule_2->model()->index(row, 0).data().toInt();
+
+    QSqlQuery query;
+    query.prepare("DELETE FROM vehicule WHERE id = :id");
+    query.bindValue(":id", vehiculeId);
+
+    if(query.exec())
+    {
+        QMessageBox::information(this, "Succès", "Véhicule supprimé !");
+        loadVehicules();
+    }
+    else
+    {
+        QMessageBox::critical(this, "Erreur", query.lastError().text());
+    }
+}
+
+
+void MainWindow::on_pushButton_3_2_clicked()
+{
+    QDialog *dialog = new QDialog(this);
+    dialog->setWindowTitle("Statistique des Véhicules par Statut");
+    dialog->resize(800, 500);
+
+    if (!QSqlDatabase::database().isOpen()) {
+        qDebug() << "Database NOT connected!";
+        return;
+    }
+
+    QSqlQuery query;
+
+    // Group vehicules by statut
+    if(!query.exec("SELECT statut, COUNT(*) FROM vehicule GROUP BY statut"))
+    {
+        qDebug() << "Query error:" << query.lastError();
+        return;
+    }
+
+    QBarSet *set = new QBarSet("Nombre de Véhicules");
+    QStringList categories;
+
+    while(query.next())
+    {
+        QString statut = query.value(0).toString();
+        int count = query.value(1).toInt();
+
+        categories << statut;
+        *set << count;
+    }
+
+    if(categories.isEmpty())
+    {
+        QMessageBox::warning(this, "Info", "Aucune donnée trouvée !");
+        return;
+    }
+
+    QBarSeries *series = new QBarSeries();
+    series->append(set);
+
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Répartition des Véhicules par Statut");
+    chart->setAnimationOptions(QChart::SeriesAnimations);
+
+    QBarCategoryAxis *axisX = new QBarCategoryAxis();
+    axisX->append(categories);
+    chart->addAxis(axisX, Qt::AlignBottom);
+    series->attachAxis(axisX);
+
+    QValueAxis *axisY = new QValueAxis();
+    axisY->setTitleText("Nombre de Véhicules");
+    chart->addAxis(axisY, Qt::AlignLeft);
+    series->attachAxis(axisY);
+
+    QChartView *chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    QVBoxLayout *layout = new QVBoxLayout(dialog);
+    layout->addWidget(chartView);
+    dialog->setLayout(layout);
+
+    dialog->show();
 }
 

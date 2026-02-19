@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="page_4">
      <widget class="QCommandLinkButton" name="commandLinkButton_18">
@@ -897,6 +897,40 @@ font-size: 12;</string>
        <string>role</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="delete_btn_1">
+      <property name="geometry">
+       <rect>
+        <x>1000</x>
+        <y>70</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color: rgb(0, 0, 0);
+font: 75 9pt &quot;Arial&quot;;
+color: white;
+border-radius:10px;
+}
+
+QPushButton:hover {
+background-color: rgb(67, 67, 67);
+font: 75 9pt &quot;Arial&quot;;
+color: white;
+border-radius:10px;
+}
+QPushButton:pressed {
+background-color: rgb(103, 103, 103);
+font: 75 9pt &quot;Arial&quot;;
+color: white;
+border-radius:10px;
+}</string>
+      </property>
+      <property name="text">
+       <string>Supprimer</string>
+      </property>
+     </widget>
      <zorder>label_77</zorder>
      <zorder>label_86</zorder>
      <zorder>label_85</zorder>
@@ -941,6 +975,7 @@ font-size: 12;</string>
      <zorder>label_68</zorder>
      <zorder>label_75</zorder>
      <zorder>label_74</zorder>
+     <zorder>delete_btn_1</zorder>
     </widget>
     <widget class="QWidget" name="page_5">
      <widget class="QLabel" name="label_logo_6">
@@ -1090,7 +1125,7 @@ font-family: &quot;Bahnshcrift Light&quot;;</string>
        <string notr="true">color: black;</string>
       </property>
       <property name="text">
-       <string>role</string>
+       <string>statut</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="message_2">
@@ -1121,10 +1156,10 @@ font-family: &quot;Bahnshcrift Light&quot;;</string>
        <string notr="true">color: black;</string>
       </property>
       <property name="text">
-       <string>nom</string>
+       <string>marque</string>
       </property>
      </widget>
-     <widget class="QTableView" name="tableClient_2">
+     <widget class="QTableView" name="tableVehicule_2">
       <property name="geometry">
        <rect>
         <x>686</x>
@@ -1169,7 +1204,7 @@ font-size: 12;</string>
        <string>id:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lerole_2">
+     <widget class="QLineEdit" name="statut_3">
       <property name="geometry">
        <rect>
         <x>435</x>
@@ -1179,7 +1214,7 @@ font-size: 12;</string>
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pd_ajouter_2_2">
+     <widget class="QPushButton" name="modifier_3">
       <property name="geometry">
        <rect>
         <x>475</x>
@@ -1218,7 +1253,7 @@ border-radius:10px;
        <rect>
         <x>703</x>
         <y>26</y>
-        <width>151</width>
+        <width>181</width>
         <height>31</height>
        </rect>
       </property>
@@ -1240,7 +1275,7 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;&quot;&gt;Liste des Clients:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;&quot;&gt;Liste des Vehicules:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QPushButton" name="sms_2">
@@ -1277,7 +1312,7 @@ border-radius:10px;
        <string>SMS</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="leid_2">
+     <widget class="QLineEdit" name="id_3">
       <property name="geometry">
        <rect>
         <x>435</x>
@@ -1287,7 +1322,7 @@ border-radius:10px;
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="leprofeesion_2">
+     <widget class="QLineEdit" name="kilometrage_3">
       <property name="geometry">
        <rect>
         <x>435</x>
@@ -1315,7 +1350,7 @@ border-radius:10px;
        <string notr="true">color: black;</string>
       </property>
       <property name="text">
-       <string>prenom</string>
+       <string>modele</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_89">
@@ -1337,13 +1372,13 @@ border-radius:10px;
        <string notr="true">color: black;</string>
       </property>
       <property name="text">
-       <string>date_naissance</string>
+       <string>immatriculation</string>
       </property>
      </widget>
      <widget class="Line" name="line_9">
       <property name="geometry">
        <rect>
-        <x>855</x>
+        <x>860</x>
         <y>40</y>
         <width>133</width>
         <height>2</height>
@@ -1356,7 +1391,7 @@ border-radius:10px;
        <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QLineEdit" name="letelephone_2">
+     <widget class="QLineEdit" name="capacite_3">
       <property name="geometry">
        <rect>
         <x>435</x>
@@ -1405,7 +1440,7 @@ border-radius:10px;
        <rect>
         <x>335</x>
         <y>260</y>
-        <width>56</width>
+        <width>81</width>
         <height>16</height>
        </rect>
       </property>
@@ -1418,14 +1453,14 @@ border-radius:10px;
        <string notr="true">color: black;</string>
       </property>
       <property name="text">
-       <string>profession</string>
+       <string>kilometrage</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_91">
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
+        <y>-10</y>
         <width>308</width>
         <height>572</height>
        </rect>
@@ -1461,7 +1496,7 @@ border-radius:10px;
        <rect>
         <x>335</x>
         <y>200</y>
-        <width>56</width>
+        <width>81</width>
         <height>16</height>
        </rect>
       </property>
@@ -1474,7 +1509,7 @@ border-radius:10px;
        <string notr="true">color: black;</string>
       </property>
       <property name="text">
-       <string>Email</string>
+       <string>carburant</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_94">
@@ -1482,7 +1517,7 @@ border-radius:10px;
        <rect>
         <x>335</x>
         <y>230</y>
-        <width>56</width>
+        <width>81</width>
         <height>16</height>
        </rect>
       </property>
@@ -1495,10 +1530,10 @@ border-radius:10px;
        <string notr="true">color: black;</string>
       </property>
       <property name="text">
-       <string>telephone</string>
+       <string>capacite</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="leprenom_2">
+     <widget class="QLineEdit" name="modele_3">
       <property name="geometry">
        <rect>
         <x>435</x>
@@ -1526,7 +1561,7 @@ border-radius:10px;
        <string notr="true">color: black;</string>
       </property>
       <property name="text">
-       <string>CIN</string>
+       <string>type</string>
       </property>
      </widget>
      <widget class="QTextBrowser" name="textBrowser_11">
@@ -1556,10 +1591,10 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;&quot;&gt;Ajouter Client:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;&quot;&gt;Ajouter Vehicule:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lecin_2">
+     <widget class="QLineEdit" name="type_3">
       <property name="geometry">
        <rect>
         <x>435</x>
@@ -1588,7 +1623,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pd_ajouter_2">
+     <widget class="QPushButton" name="ajouter_3">
       <property name="geometry">
        <rect>
         <x>345</x>
@@ -1710,7 +1745,7 @@ border-radius:10px;
        <string>Mail</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="leemail_2">
+     <widget class="QLineEdit" name="carburant_3">
       <property name="geometry">
        <rect>
         <x>435</x>
@@ -1736,7 +1771,7 @@ border-radius:10px;
        <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QLineEdit" name="ledatenaissance_2">
+     <widget class="QLineEdit" name="immatriculation_3">
       <property name="geometry">
        <rect>
         <x>435</x>
@@ -1781,7 +1816,7 @@ border-radius: 40px;
       <property name="geometry">
        <rect>
         <x>321</x>
-        <y>7</y>
+        <y>10</y>
         <width>309</width>
         <height>361</height>
        </rect>
@@ -1795,7 +1830,7 @@ border-radius: 40px;
        <string/>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lenom_2">
+     <widget class="QLineEdit" name="marque_3">
       <property name="geometry">
        <rect>
         <x>435</x>
@@ -1848,52 +1883,87 @@ border-radius: 40px;
        <string/>
       </property>
      </widget>
+     <widget class="QPushButton" name="delete_btn_2">
+      <property name="geometry">
+       <rect>
+        <x>1010</x>
+        <y>70</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color: rgb(0, 0, 0);
+font: 75 9pt &quot;Arial&quot;;
+color: white;
+border-radius:10px;
+}
+
+QPushButton:hover {
+background-color: rgb(67, 67, 67);
+font: 75 9pt &quot;Arial&quot;;
+color: white;
+border-radius:10px;
+}
+QPushButton:pressed {
+background-color: rgb(103, 103, 103);
+font: 75 9pt &quot;Arial&quot;;
+color: white;
+border-radius:10px;
+}</string>
+      </property>
+      <property name="text">
+       <string>Supprimer</string>
+      </property>
+     </widget>
+     <zorder>label_92</zorder>
      <zorder>label_84</zorder>
+     <zorder>label_99</zorder>
+     <zorder>label_98</zorder>
      <zorder>label_83</zorder>
      <zorder>label_logo_6</zorder>
      <zorder>mail_2</zorder>
      <zorder>label_79</zorder>
      <zorder>message_2</zorder>
      <zorder>label_81</zorder>
-     <zorder>tableClient_2</zorder>
+     <zorder>tableVehicule_2</zorder>
      <zorder>label_82</zorder>
-     <zorder>lerole_2</zorder>
-     <zorder>pd_ajouter_2_2</zorder>
+     <zorder>statut_3</zorder>
+     <zorder>modifier_3</zorder>
      <zorder>textBrowser_10</zorder>
      <zorder>sms_2</zorder>
-     <zorder>leid_2</zorder>
-     <zorder>leprofeesion_2</zorder>
+     <zorder>id_3</zorder>
+     <zorder>kilometrage_3</zorder>
      <zorder>label_87</zorder>
      <zorder>label_89</zorder>
      <zorder>line_9</zorder>
-     <zorder>letelephone_2</zorder>
+     <zorder>capacite_3</zorder>
      <zorder>pdf_2</zorder>
      <zorder>label_90</zorder>
      <zorder>label_91</zorder>
-     <zorder>label_92</zorder>
      <zorder>label_93</zorder>
      <zorder>label_94</zorder>
-     <zorder>leprenom_2</zorder>
+     <zorder>modele_3</zorder>
      <zorder>label_95</zorder>
      <zorder>textBrowser_11</zorder>
-     <zorder>lecin_2</zorder>
+     <zorder>type_3</zorder>
      <zorder>label_96</zorder>
-     <zorder>pd_ajouter_2</zorder>
+     <zorder>ajouter_3</zorder>
      <zorder>subject_2</zorder>
      <zorder>pushButton_3_2</zorder>
      <zorder>recvr_2</zorder>
      <zorder>pushButton_2_3</zorder>
-     <zorder>leemail_2</zorder>
+     <zorder>carburant_3</zorder>
      <zorder>line_10</zorder>
-     <zorder>ledatenaissance_2</zorder>
+     <zorder>immatriculation_3</zorder>
      <zorder>rechercherText_2</zorder>
      <zorder>label_97</zorder>
-     <zorder>label_98</zorder>
-     <zorder>lenom_2</zorder>
+     <zorder>marque_3</zorder>
      <zorder>comboTri_2</zorder>
-     <zorder>label_99</zorder>
      <zorder>commandLinkButton_24</zorder>
      <zorder>commandLinkButton_25</zorder>
+     <zorder>delete_btn_2</zorder>
     </widget>
    </widget>
   </widget>
