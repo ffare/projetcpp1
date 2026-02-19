@@ -605,3 +605,92 @@ void MainWindow::on_pushButton_3_2_clicked()
     dialog->show();
 }
 
+
+void MainWindow::on_pdf_2_clicked()
+{
+    // Get selected row
+    QModelIndexList selection = ui->tableVehicule_2->selectionModel()->selectedRows();
+    if (selection.isEmpty()) {
+        QMessageBox::warning(this, "Attention", "Veuillez sélectionner un client à imprimer !");
+        return;
+    }
+
+    int row = selection.at(0).row();
+    QAbstractItemModel *model = ui->tableVehicule_2->model();
+    const int columnCount = model->columnCount();
+
+    // Start HTML
+    QString strStream;
+    QTextStream out(&strStream);
+    out << "<html>\n<head>\n"
+        << "<meta charset='UTF-8'>\n"
+        << "<title>Vehicule PDF</title>\n"
+        << "<style>"
+        << "table { border-collapse: collapse; width: 100%; }"
+        << "th, td { border: 1px solid black; padding: 4px; text-align: left; }"
+        << "th { background-color: #f0f0f0; }"
+        << "</style>\n"
+        << "</head>\n<body>\n"
+        << "<h1>Informations du vehicule</h1>\n"
+        << "<table>\n";
+
+    // Table headers and values
+    out << "<tr>";
+    for (int col = 0; col < columnCount; ++col) {
+        if (!ui->tableVehicule_2->isColumnHidden(col)) {
+            out << QString("<th>%1</th>").arg(model->headerData(col, Qt::Horizontal).toString());
+        }
+    }
+    out << "</tr>\n<tr>";
+
+    for (int col = 0; col < columnCount; ++col) {
+        if (!ui->tableVehicule_2->isColumnHidden(col)) {
+            QString data = model->data(model->index(row, col)).toString().simplified();
+            out << QString("<td>%1</td>").arg(!data.isEmpty() ? data : "&nbsp;");
+        }
+    }
+    out << "</tr>\n";
+
+    out << "</table>\n</body>\n</html>";
+
+    // Create QTextDocument
+    QTextDocument document;
+    document.setHtml(strStream);
+
+    // Ask user where to save PDF
+    QString filename = QFileDialog::getSaveFileName(this, "Enregistrer PDF", "vehicule.pdf", "*.pdf");
+    if (filename.isEmpty()) return;
+
+    // Print to PDF
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(filename);
+
+    document.print(&printer);
+
+    QMessageBox::information(this, "Succès", "PDF du vehicule créé avec succès !");
+}
+
+
+void MainWindow::on_rechercherText_2_textChanged(const QString &text)
+{
+    QSqlQueryModel *model = new QSqlQueryModel(this);
+
+    QString queryStr =
+        "SELECT id, marque, modele, immatriculation, type, carburant, capacite, kilometrage, statut "
+        "FROM vehicule "
+        "WHERE marque LIKE '%" + text + "%' "
+                 "OR modele LIKE '%" + text + "%' "
+                 "OR immatriculation LIKE '%" + text + "%' "
+                 "OR statut LIKE '%" + text + "%'";
+
+    model->setQuery(queryStr);
+
+    if (model->lastError().isValid()) {
+        qDebug() << "Search error:" << model->lastError();
+    }
+
+    ui->tableVehicule_2->setModel(model);
+
+}
+

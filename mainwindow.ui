@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page_4">
      <widget class="QCommandLinkButton" name="commandLinkButton_18">
@@ -331,31 +331,6 @@ border: 1px solid black;
       <property name="text">
        <string/>
       </property>
-     </widget>
-     <widget class="QComboBox" name="comboTri_1">
-      <property name="geometry">
-       <rect>
-        <x>670</x>
-        <y>294</y>
-        <width>251</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <item>
-       <property name="text">
-        <string>profession</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>email</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>role</string>
-       </property>
-      </item>
      </widget>
      <widget class="QPushButton" name="pdf_1">
       <property name="geometry">
@@ -900,8 +875,8 @@ font-size: 12;</string>
      <widget class="QPushButton" name="delete_btn_1">
       <property name="geometry">
        <rect>
-        <x>1000</x>
-        <y>70</y>
+        <x>670</x>
+        <y>294</y>
         <width>93</width>
         <height>28</height>
        </rect>
@@ -952,7 +927,6 @@ border-radius:10px;
      <zorder>pd_ajouter_2_1</zorder>
      <zorder>tableClient_1</zorder>
      <zorder>rechercherText_1</zorder>
-     <zorder>comboTri_1</zorder>
      <zorder>pdf_1</zorder>
      <zorder>message_1</zorder>
      <zorder>sms_1</zorder>
@@ -1405,7 +1379,7 @@ border-radius:10px;
       <property name="geometry">
        <rect>
         <x>935</x>
-        <y>290</y>
+        <y>288</y>
         <width>93</width>
         <height>31</height>
        </rect>
@@ -1840,31 +1814,6 @@ border-radius: 40px;
        </rect>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboTri_2">
-      <property name="geometry">
-       <rect>
-        <x>675</x>
-        <y>294</y>
-        <width>251</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <item>
-       <property name="text">
-        <string>profession</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>email</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>role</string>
-       </property>
-      </item>
-     </widget>
      <widget class="QLabel" name="label_99">
       <property name="geometry">
        <rect>
@@ -1886,8 +1835,8 @@ border-radius: 40px;
      <widget class="QPushButton" name="delete_btn_2">
       <property name="geometry">
        <rect>
-        <x>1010</x>
-        <y>70</y>
+        <x>670</x>
+        <y>293</y>
         <width>93</width>
         <height>28</height>
        </rect>
@@ -1960,7 +1909,6 @@ border-radius:10px;
      <zorder>rechercherText_2</zorder>
      <zorder>label_97</zorder>
      <zorder>marque_3</zorder>
-     <zorder>comboTri_2</zorder>
      <zorder>commandLinkButton_24</zorder>
      <zorder>commandLinkButton_25</zorder>
      <zorder>delete_btn_2</zorder>

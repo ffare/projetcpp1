@@ -50,6 +50,10 @@ private slots:
 
     void on_pushButton_3_2_clicked();
 
+    void on_pdf_2_clicked();
+
+    void on_rechercherText_2_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
 
