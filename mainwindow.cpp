@@ -5,7 +5,27 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QDebug>
+#include <QVBoxLayout>
 #include <QSqlRecord>
+#include <QtPrintSupport/QPrinter>
+#include <QFileDialog>
+#include <QTcpSocket>
+#include <QSslSocket>
+#include <QTextEdit>
+#include <QMessageBox>
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QtCharts/QChartView>
+#include <QtCharts/QChart>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QValueAxis>
+
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDebug>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -185,3 +205,222 @@ void MainWindow::on_centralwidget_customContextMenuRequested(const QPoint &pos)
 {
     // Optional: implement context menu if needed
 }
+
+
+void MainWindow::on_rechercherText_1_textChanged(const QString &text)
+{
+    QSqlQueryModel *model = new QSqlQueryModel(this);
+
+    QString queryStr =
+        "SELECT id, nom, prenom, cin, email, telephone, profession, role, date_naissance "
+        "FROM client "
+        "WHERE nom LIKE '%" + text + "%' "
+                 "OR prenom LIKE '%" + text + "%' "
+                 "OR cin LIKE '%" + text + "%'";
+
+    model->setQuery(queryStr);
+
+    ui->tableClient_1->setModel(model);
+}
+
+void MainWindow::on_pdf_1_clicked()
+{
+    // Get selected row
+    QModelIndexList selection = ui->tableClient_1->selectionModel()->selectedRows();
+    if (selection.isEmpty()) {
+        QMessageBox::warning(this, "Attention", "Veuillez sélectionner un client à imprimer !");
+        return;
+    }
+
+    int row = selection.at(0).row();
+    QAbstractItemModel *model = ui->tableClient_1->model();
+    const int columnCount = model->columnCount();
+
+    // Start HTML
+    QString strStream;
+    QTextStream out(&strStream);
+    out << "<html>\n<head>\n"
+        << "<meta charset='UTF-8'>\n"
+        << "<title>Client PDF</title>\n"
+        << "<style>"
+        << "table { border-collapse: collapse; width: 100%; }"
+        << "th, td { border: 1px solid black; padding: 4px; text-align: left; }"
+        << "th { background-color: #f0f0f0; }"
+        << "</style>\n"
+        << "</head>\n<body>\n"
+        << "<h1>Informations du client</h1>\n"
+        << "<table>\n";
+
+    // Table headers and values
+    out << "<tr>";
+    for (int col = 0; col < columnCount; ++col) {
+        if (!ui->tableClient_1->isColumnHidden(col)) {
+            out << QString("<th>%1</th>").arg(model->headerData(col, Qt::Horizontal).toString());
+        }
+    }
+    out << "</tr>\n<tr>";
+
+    for (int col = 0; col < columnCount; ++col) {
+        if (!ui->tableClient_1->isColumnHidden(col)) {
+            QString data = model->data(model->index(row, col)).toString().simplified();
+            out << QString("<td>%1</td>").arg(!data.isEmpty() ? data : "&nbsp;");
+        }
+    }
+    out << "</tr>\n";
+
+    out << "</table>\n</body>\n</html>";
+
+    // Create QTextDocument
+    QTextDocument document;
+    document.setHtml(strStream);
+
+    // Ask user where to save PDF
+    QString filename = QFileDialog::getSaveFileName(this, "Enregistrer PDF", "client.pdf", "*.pdf");
+    if (filename.isEmpty()) return;
+
+    // Print to PDF
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(filename);
+
+    document.print(&printer);
+
+    QMessageBox::information(this, "Succès", "PDF du client créé avec succès !");
+}
+
+void MainWindow::on_sms_1_clicked()
+{
+
+
+}
+
+void MainWindow::on_pushButton_2_2_clicked()
+{
+    // Gmail SMTP info
+    QString smtpServer = "smtp.gmail.com";
+    int smtpPort = 465; // SSL port
+    QString username = "faresbenlakdher@gmail.com";
+    QString password = "madc qjef sptt tecu";
+    QString recipient   = ui->recvr_1->text().trimmed();
+    QString subject     = ui->subject_1->text().trimmed();
+    QString messageBody = ui->mail_1->text().trimmed();
+
+    QSslSocket socket;
+    socket.connectToHostEncrypted(smtpServer, smtpPort);
+
+    if (!socket.waitForEncrypted(5000)) {
+        QMessageBox::critical(this, "Erreur", "Impossible de se connecter au serveur SMTP !");
+        return;
+    }
+
+    // Compose a simple SMTP conversation (base64 encoding required for AUTH)
+    auto sendLine = [&socket](const QString &line){
+        socket.write((line + "\r\n").toUtf8());
+        socket.flush();
+        socket.waitForReadyRead(2000);
+    };
+
+    sendLine("EHLO localhost");
+    sendLine("AUTH LOGIN");
+    sendLine(username.toUtf8().toBase64());
+    sendLine(password.toUtf8().toBase64());
+    sendLine("MAIL FROM:<" + username + ">");
+    sendLine("RCPT TO:<" + recipient + ">");
+    sendLine("DATA");
+    sendLine("Subject: " + subject);
+    sendLine("From: " + username);
+    sendLine("To: " + recipient);
+    sendLine(""); // blank line before message body
+    sendLine(messageBody);
+    sendLine("."); // end of message
+    sendLine("QUIT");
+
+    socket.disconnectFromHost();
+
+    QMessageBox::information(this, "Info", "Email envoyé !");
+}
+
+
+void MainWindow::on_pushButton_3_1_clicked()
+{
+    QDialog *dialog = new QDialog(this);
+    dialog->setWindowTitle("Statistique des Clients par Rôle");
+    dialog->resize(800, 500);
+
+    if (!QSqlDatabase::database().isOpen()) {
+        qDebug() << "Database NOT connected!";
+        return;
+    }
+
+    QSqlQuery query;
+
+    // This query groups clients by role automatically
+    if(!query.exec("SELECT role, COUNT(*) FROM client GROUP BY role"))
+    {
+        qDebug() << "Query error:" << query.lastError();
+        return;
+    }
+
+    QBarSet *set = new QBarSet("Nombre de Clients");
+    QStringList categories;
+
+    while(query.next())
+    {
+        QString role = query.value(0).toString();
+        int count = query.value(1).toInt();
+
+        categories << role;
+        *set << count;
+    }
+
+    if(categories.isEmpty())
+    {
+        QMessageBox::warning(this, "Info", "Aucune donnée trouvée !");
+        return;
+    }
+
+    QBarSeries *series = new QBarSeries();
+    series->append(set);
+
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Répartition des Clients par Rôle");
+    chart->setAnimationOptions(QChart::SeriesAnimations);
+
+    QBarCategoryAxis *axisX = new QBarCategoryAxis();
+    axisX->append(categories);
+    chart->addAxis(axisX, Qt::AlignBottom);
+    series->attachAxis(axisX);
+
+    QValueAxis *axisY = new QValueAxis();
+    axisY->setTitleText("Nombre de Clients");
+    chart->addAxis(axisY, Qt::AlignLeft);
+    series->attachAxis(axisY);
+
+    QChartView *chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    QVBoxLayout *layout = new QVBoxLayout(dialog);
+    layout->addWidget(chartView);
+    dialog->setLayout(layout);
+
+    dialog->show();
+}
+
+void MainWindow::on_commandLinkButton_25_clicked()
+{
+
+}
+
+
+void MainWindow::on_commandLinkButton_18_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+
+void MainWindow::on_commandLinkButton_24_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+

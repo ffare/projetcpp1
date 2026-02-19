@@ -26,6 +26,22 @@ private slots:
 
     void on_tableClient_1_clicked(const QModelIndex &index);
 
+    void on_rechercherText_1_textChanged(const QString &arg1);
+
+    void on_pdf_1_clicked();
+
+    void on_sms_1_clicked();
+
+    void on_pushButton_2_2_clicked();
+
+    void on_pushButton_3_1_clicked();
+
+    void on_commandLinkButton_25_clicked();
+
+    void on_commandLinkButton_18_clicked();
+
+    void on_commandLinkButton_24_clicked();
+
 private:
     Ui::MainWindow *ui;
 
